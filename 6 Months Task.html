@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6‑Month Master Syllabus Dashboard (persistent, starts at 0)</title>
+  <style>
+    /* ================= DESIGN TOKENS ================= */
+    :root {
+      --ff-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --ff-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+
+      --spacing-xxs: 2px;
+      --spacing-xs: 4px;
+      --spacing-s: 8px;
+      --spacing-m: 12px;
+      --spacing-l: 16px;
+      --spacing-xl: 20px;
+      --spacing-xxl: 24px;
+
+      --shape-none: 0px;
+      --shape-xs: 4px;
+      --shape-s: 8px;
+      --shape-m: 12px;
+      --shape-l: 16px;
+      --shape-xl: 24px;
+      --shape-full: 999px;
+
+      --surface: #fdfcfc;
+      --surface-dim: #f2f0f0;
+      --surface-bright: #ffffff;
+      --surface-container: #f2f0f0;
+      --surface-container-high: #e6e6e6;
+      --on-surface: #000000;
+      --on-surface-variant: rgba(0, 0, 0, 0.55);
+      --on-surface-low: rgba(0, 0, 0, 0.08);
+      --primary: #3186ff;
+      --accent: #9dd2ff;
+      --accent-container: #dcf1ff;
+      --accent-fixed: #3186ff;
+      --stroke-default: #e3e3e3;
+      --outline: #727676;
+      --positive: #008052;
+      --error: #de2d29;
+    }
+
+    :root[data-theme="dark"] {
+      --surface: #0f0f0f;
+      --surface-dim: #141414;
+      --surface-bright: #1c1c1c;
+      --surface-container: #141414;
+      --surface-container-high: #1c1c1c;
+      --on-surface: #e0e0e0;
+      --on-surface-variant: rgba(255, 255, 255, 0.55);
+      --on-surface-low: rgba(255, 255, 255, 0.12);
+      --primary: #9dd2ff;
+      --accent: #1f3b9b;
+      --accent-container: #192967;
+      --accent-fixed: #3186ff;
+      --stroke-default: #2d2f38;
+      --outline: #9a9b9c;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --surface: #0f0f0f;
+        --surface-dim: #141414;
+        --surface-bright: #1c1c1c;
+        --surface-container: #141414;
+        --surface-container-high: #1c1c1c;
+        --on-surface: #e0e0e0;
+        --on-surface-variant: rgba(255, 255, 255, 0.55);
+        --on-surface-low: rgba(255, 255, 255, 0.12);
+        --primary: #9dd2ff;
+        --accent: #1f3b9b;
+        --accent-container: #192967;
+        --accent-fixed: #3186ff;
+        --stroke-default: #2d2f38;
+        --outline: #9a9b9c;
+      }
+    }
+
+    /* ================= RESET & BASE ================= */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: transparent;
+      color: var(--on-surface);
+      font-family: var(--ff-sans);
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ================= LAYOUT ================= */
+    .widget-container {
+      width: 100%;
+      min-height: 280px;
+      padding: var(--spacing-m);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-m);
+    }
+
+    .header-card {
+      background: var(--surface-bright);
+      border-radius: var(--shape-m);
+      padding: var(--spacing-l);
+      border: 1px solid var(--stroke-default);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-s);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--spacing-m);
+      flex-wrap: wrap;
+    }
+
+    .header-titles {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .header-titles h2 {
+      font-size: 24px;
+      line-height: 28px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--on-surface);
+    }
+
+    .header-titles p {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      color: var(--on-surface-variant);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: var(--spacing-s);
+      align-items: center;
+    }
+
+    .print-btn {
+      padding: 6px 14px;
+      font-size: 13px;
+      background: var(--accent-container);
+      color: var(--accent-fixed);
+      border: 1px solid var(--primary);
+      border-radius: var(--shape-full);
+      cursor: pointer;
+      font-weight: 600;
+      font-family: var(--ff-sans);
+      transition: background 0.15s;
+    }
+
+    .print-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .progress-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--on-surface-variant);
+      font-family: var(--ff-mono);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-dim);
+      border-radius: var(--shape-full);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--primary);
+      transition: width 0.3s ease;
+      border-radius: var(--shape-full);
+    }
+
+    .controls-card {
+      background: var(--surface-dim);
+      border-radius: var(--shape-m);
+      padding: var(--spacing-m);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-m);
+      border: 1px solid var(--stroke-default);
+    }
+
+    .search-row {
+      display: flex;
+      gap: var(--spacing-s);
+      align-items: center;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 14px;
+      border-radius: var(--shape-full);
+      border: 1px solid var(--stroke-default);
+      background: var(--surface-bright);
+      color: var(--on-surface);
+      font-size: 14px;
+      font-family: var(--ff-sans);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+
+    .tabs-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 6px 14px;
+      border-radius: var(--shape-full);
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--surface-bright);
+      color: var(--on-surface-variant);
+      border: 1px solid var(--stroke-default);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      font-family: var(--ff-sans);
+    }
+
+    .tab-btn:hover {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+
+    .tab-btn.is-active {
+      background: var(--accent-container);
+      color: var(--accent-fixed);
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .content-area {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-m);
+    }
+
+    .week-group {
+      background: var(--surface-bright);
+      border-radius: var(--shape-m);
+      border: 1px solid var(--stroke-default);
+      overflow: hidden;
+    }
+
+    .week-header {
+      padding: 12px 16px;
+      background: var(--surface-dim);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      font-size: 14px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--stroke-default);
+      font-family: var(--ff-sans);
+    }
+
+    .week-header:hover {
+      background: var(--surface-container-high);
+    }
+
+    .week-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .week-toggle-icon {
+      font-family: var(--ff-mono);
+      font-size: 12px;
+      color: var(--on-surface-variant);
+    }
+
+    .week-meta {
+      font-family: var(--ff-mono);
+      font-size: 12px;
+      color: var(--on-surface-variant);
+    }
+
+    .day-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .day-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--stroke-default);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .day-item:last-child {
+      border-bottom: none;
+    }
+
+    .day-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .day-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .day-badge {
+      font-family: var(--ff-mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--shape-xs);
+      background: var(--surface-dim);
+      color: var(--on-surface-variant);
+      border: 1px solid var(--stroke-default);
+    }
+
+    .track-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--shape-xs);
+      background: var(--accent-container);
+      color: var(--accent-fixed);
+    }
+
+    .day-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-left: 4px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--on-surface);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .task-checkbox {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--outline);
+      border-radius: 4px;
+      margin-top: 2px;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      outline: none;
+      background: var(--surface-bright);
+      flex-shrink: 0;
+    }
+
+    .task-checkbox:checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .task-checkbox:checked::before {
+      content: "✓";
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .task-label {
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .task-item.is-completed .task-label {
+      text-decoration: line-through;
+      color: var(--on-surface-variant);
+    }
+
+    .empty-state {
+      padding: 32px 16px;
+      text-align: center;
+      color: var(--on-surface-variant);
+      background: var(--surface-dim);
+      border-radius: var(--shape-m);
+      border: 1px solid var(--stroke-default);
+    }
+
+    /* ================= STUDY RESOURCES ================= */
+    .study-resources {
+      margin-top: 8px;
+      padding: 10px 12px;
+      background: var(--surface-dim);
+      border: 1px solid var(--stroke-default);
+      border-radius: var(--shape-s);
+    }
+
+    .study-resources-title {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 7px;
+      color: var(--on-surface);
+    }
+
+    .study-resource-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .study-resource-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border-radius: var(--shape-full);
+      border: 1px solid var(--primary);
+      background: var(--accent-container);
+      color: var(--accent-fixed);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .study-resource-link:hover {
+      opacity: .82;
+      transform: translateY(-1px);
+    }
+
+    /* ================= SCROLLBAR ================= */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: var(--shape-full);
+    }
+
+    :root[data-theme="dark"] * {
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+
+    :root[data-theme="dark"] ::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) * {
+        scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+      }
+
+      :root:not([data-theme="light"]) ::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    /* ================= PRINT ================= */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11pt;
+      }
+
+      .no-print,
+      .controls-card,
+      .header-actions {
+        display: none !important;
+      }
+
+      .widget-container {
+        padding: 0 !important;
+      }
+
+      .header-card,
+      .week-group {
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin-bottom: 12px;
+      }
+
+      .task-checkbox {
+        border-color: #000 !important;
+      }
+
+      .week-group-content {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="widget-container">
+    <!-- HEADER -->
+    <div class="header-card">
+      <div class="header-top">
+        <div class="header-titles">
+          <h2>6-Month Master Syllabus Dashboard</h2>
+          <p>Complete 168-Day Roadmap with deep study resources: Django, React+TS, Postgres, Redis, Docker, AWS, System Design, Go, Startup & YouTube</p>
+        </div>
+        <div class="header-actions no-print">
+          <button id="printBtn" class="print-btn">Print / Save PDF</button>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-info">
+          <span id="progressText">Overall Progress: 0 / 0 tasks completed</span>
+          <span id="progressPct" style="font-weight: 600;">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progressBarFill" class="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls-card no-print">
+      <div class="search-row">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search topics (e.g. Django ORM, Docker, Redis, Go concurrency)...">
+      </div>
+      <div class="tabs-row" id="monthTabs">
+        <!-- dynamically populated -->
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div id="contentArea" class="content-area">
+      <!-- dynamically populated -->
+    </div>
+  </div>
+
+  <script>
+    // ==================== CURRICULUM DATA ====================
+    const TRACKS = {
+      HTTP: 'HTTP & Web Foundations',
+      REACT: 'React & TypeScript',
+      DJANGO: 'Django & DRF',
+      POSTGRES: 'PostgreSQL',
+      REDIS: 'Redis & Caching',
+      DOCKER: 'Docker & Linux',
+      AWS: 'AWS & Cloud',
+      SYS_DESIGN: 'System Design',
+      GO: 'Go Language',
+      STARTUP: 'Startup & MVP',
+      YOUTUBE: 'YouTube & Branding'
+    };
+
+    const SYLLABUS_DATA = [];
+
+    function addDay(day, month, week, title, track, tasks) {
+      SYLLABUS_DATA.push({ day, month, week, title, track, tasks });
+    }
+
+    // ---------- MONTH 1 ----------
+    addDay(1, 1, 1, 'Internet Basics & Vite Setup', TRACKS.HTTP, [
+      'Map out Internet basics (IP, TCP vs UDP, DNS)',
+      'Initialize Vite React + TypeScript project, configure Tailwind CSS',
+      'Set up folder structure (src/components, src/services, src/types)',
+      'Outline YouTube Video #1: "How Practo Makes Money"'
+    ]);
+    addDay(2, 1, 1, 'HTTP/HTTPS Lifecycle & TS Interfaces', TRACKS.HTTP, [
+      'Master HTTP/HTTPS request-response lifecycle, methods, status codes, headers',
+      'Define core TypeScript domain interfaces (Clinic, Doctor, Slot)',
+      'Configure react-router-dom'
+    ]);
+    addDay(3, 1, 1, 'Static React Pages & Web Security Basics', TRACKS.REACT, [
+      'Build static mock pages: landing, clinic discovery, doctor profiles',
+      'Study Cookies, Sessions, CORS, TLS/SSL'
+    ]);
+    addDay(4, 1, 1, 'JSON Payloads & API Client Setup', TRACKS.REACT, [
+      'Understand JSON payloads and API contract design',
+      'Install Axios, configure centralized API client (src/services/api.ts)',
+      'Set up mock data states'
+    ]);
+    addDay(5, 1, 1, 'Customer Discovery & Networking Review', TRACKS.STARTUP, [
+      'List local clinic workflow pain points, define target customer',
+      'Draft 5 interview questions',
+      'Review networking concepts via Postman'
+    ]);
+    addDay(6, 1, 1, 'YouTube Video #1 & Code Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "How Practo Makes Money: The Business Model Explained"',
+      'Review React component code and ensure strict TypeScript compilation'
+    ]);
+    addDay(7, 1, 1, 'YouTube Video #1 & Code Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "How Practo Makes Money: The Business Model Explained"',
+      'Review React component code and ensure strict TypeScript compilation'
+    ]);
+
+    addDay(8, 1, 2, 'Monolithic Architecture & Django Init', TRACKS.DJANGO, [
+      'Study monolithic request/response lifecycles, MVC, service layers, repository patterns',
+      'Initialize Django project alongside React, configure virtualenv, .env, first app (clinics)'
+    ]);
+    addDay(9, 1, 2, 'Django URLs, FBVs vs CBVs', TRACKS.DJANGO, [
+      'Learn Django URLs, Function-Based Views (FBVs) vs Class-Based Views (CBVs)',
+      'Write initial views and URL routes for clinic registration and profiles'
+    ]);
+    addDay(10, 1, 2, 'Middleware, Logging & Error Handling', TRACKS.DJANGO, [
+      'Understand Django middleware, request/response hooks, logging, global exception handling',
+      'Wire up custom error-handling middleware and handle typed error states in React'
+    ]);
+    addDay(11, 1, 2, 'Token Auth Concepts & User Model', TRACKS.DJANGO, [
+      'Study token authentication, sessions vs tokens, password hashing primitives',
+      'Configure Django User model and prepare custom user profiles for doctors/admins'
+    ]);
+    addDay(12, 1, 2, 'Customer Validation & Django Refactor', TRACKS.STARTUP, [
+      'Talk to at least 1 local clinic/practitioner to validate booking slot assumptions',
+      'Refactor Django project structure for clean separation of concerns'
+    ]);
+    addDay(13, 1, 2, 'YouTube Video #2 & CORS Verification', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "Why Indian Healthcare Startups are Booming"',
+      'Consolidate Django routing and verify React-Django CORS communication'
+    ]);
+    addDay(14, 1, 2, 'YouTube Video #2 & CORS Verification', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "Why Indian Healthcare Startups are Booming"',
+      'Consolidate Django routing and verify React-Django CORS communication'
+    ]);
+
+    addDay(15, 1, 3, 'DRF Serializers', TRACKS.DJANGO, [
+      'Master DRF Serializers (Serializer vs ModelSerializer), field validation, data serialization',
+      'Create serializers for Clinics, Doctors, Appointment slots'
+    ]);
+    addDay(16, 1, 3, 'DRF APIView, GenericAPIView, ViewSets', TRACKS.DJANGO, [
+      'Learn APIView, GenericAPIView, ViewSets, DefaultRouters in DRF',
+      'Implement CRUD operations for clinic platform using DRF ViewSets'
+    ]);
+    addDay(17, 1, 3, 'Permissions, Pagination, Filtering', TRACKS.DJANGO, [
+      'Understand object-level permissions, custom permission classes, pagination, filtering, searching',
+      'Add custom permission rules so only authenticated clinic owners modify schedules'
+    ]);
+    addDay(18, 1, 3, 'Media Files & Background Tasks Intro', TRACKS.DJANGO, [
+      'Learn media file handling, image storage, asynchronous background tasks',
+      'Implement doctor profile picture uploads and store file paths safely'
+    ]);
+    addDay(19, 1, 3, 'Connect React + TS to DRF Endpoints', TRACKS.REACT, [
+      'Connect React + TypeScript frontend to live DRF endpoints, replacing mock data',
+      'Use Axios service functions and test end-to-end data fetching'
+    ]);
+    addDay(20, 1, 3, 'YouTube Video #3 & API Integration Debug', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "How a Clinic Booking App Actually Works Under the Hood"',
+      'Debug API integration issues between TypeScript interfaces and DRF responses'
+    ]);
+    addDay(21, 1, 3, 'YouTube Video #3 & API Integration Debug', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "How a Clinic Booking App Actually Works Under the Hood"',
+      'Debug API integration issues between TypeScript interfaces and DRF responses'
+    ]);
+
+    addDay(22, 1, 4, 'Normalization & Core Schema Design', TRACKS.POSTGRES, [
+      'Study normalization (1NF, 2NF, 3NF), primary/foreign keys, unique/check constraints',
+      'Design core PostgreSQL schema: Clinics → Doctors → Slots → Appointments'
+    ]);
+    addDay(23, 1, 4, 'B-tree Indexes & EXPLAIN ANALYZE', TRACKS.POSTGRES, [
+      'Learn B-tree indexes, indexing strategies, analyze slow queries using EXPLAIN ANALYZE',
+      'Add explicit indexes to high-frequency search fields'
+    ]);
+    addDay(24, 1, 4, 'Joins, Window Functions, ACID', TRACKS.POSTGRES, [
+      'Master inner/outer joins, window functions, group by aggregations, transactions, ACID',
+      'Write custom SQL or complex ORM aggregations for clinic daily booking summaries'
+    ]);
+    addDay(25, 1, 4, 'Connection Pooling, Locks, Isolation', TRACKS.POSTGRES, [
+      'Understand connection pooling, database locks (row vs table), transaction isolation levels',
+      'Perform database integrity check across local Postgres container'
+    ]);
+    addDay(26, 1, 4, 'Full MVP Feature Audit', TRACKS.STARTUP, [
+      'Run through entire Month 1 MVP feature set: React UI → TS validation → DRF → Django → PostgreSQL',
+      'Audit codebase structure'
+    ]);
+    addDay(27, 1, 4, 'YouTube Video #4 & Month 1 Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "Why Small Clinics Desperately Need Software"',
+      'Evaluate weekly time investment and prepare for Month 2'
+    ]);
+    addDay(28, 1, 4, 'YouTube Video #4 & Month 1 Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "Why Small Clinics Desperately Need Software"',
+      'Evaluate weekly time investment and prepare for Month 2'
+    ]);
+
+    // ---------- MONTH 2 ----------
+    addDay(1, 2, 5, 'JWT Structure & Token Lifetimes', TRACKS.DJANGO, [
+      'Understand stateless auth, JWT structure, access vs refresh tokens',
+      'Install djangorestframework-simplejwt and configure token lifetimes',
+      'Outline YouTube Video #1: "How Practo Handles Millions of Real-Time Appointments"'
+    ]);
+    addDay(2, 2, 5, 'Password Hashing & Custom User Roles', TRACKS.DJANGO, [
+      'Learn cryptographic password hashing (bcrypt), salting, JWT claims',
+      'Extend User model with roles (PATIENT, DOCTOR, CLINIC_ADMIN)'
+    ]);
+    addDay(3, 2, 5, 'Authorization Patterns & Object Permissions', TRACKS.DJANGO, [
+      'Study authorization patterns and object-level permissions',
+      'Write custom DRF permission classes ensuring only doctors/admins modify slot availabilities'
+    ]);
+    addDay(4, 2, 5, 'React AuthContext & Axios Interceptors', TRACKS.REACT, [
+      'Create React Context (AuthContext) in TypeScript to manage logged-in user state',
+      'Configure Axios interceptors to attach Authorization: Bearer <token> headers'
+    ]);
+    addDay(5, 2, 5, 'Token Refresh & Auth Flow Testing', TRACKS.REACT, [
+      'Implement automatic token refreshing on 401 Unauthorized',
+      'Test login, expiration, and redirection flows'
+    ]);
+    addDay(6, 2, 5, 'YouTube Video #1 & Auth Validation', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "How Practo Handles Millions of Real-Time Appointments"',
+      'Validate end-to-end authentication flows'
+    ]);
+    addDay(7, 2, 5, 'YouTube Video #1 & Auth Validation', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "How Practo Handles Millions of Real-Time Appointments"',
+      'Validate end-to-end authentication flows'
+    ]);
+
+    addDay(8, 2, 6, 'Pagination, Filtering, Search', TRACKS.DJANGO, [
+      'Learn Cursor vs Offset-based pagination, dynamic query filtering, search optimization',
+      'Integrate django-filter into DRF viewsets'
+    ]);
+    addDay(9, 2, 6, 'CORS, XSS, CSRF, Rate Limiting', TRACKS.DJANGO, [
+      'Deep dive into CORS security, XSS, CSRF, SQL Injection prevention, rate-limiting',
+      'Configure django-cors-headers and basic IP rate-limiting'
+    ]);
+    addDay(10, 2, 6, 'OpenAPI Specs & Swagger Docs', TRACKS.DJANGO, [
+      'Understand OpenAPI specifications and automated API documentation',
+      'Integrate drf-spectacular to generate interactive Swagger UI docs at /api/docs/'
+    ]);
+    addDay(11, 2, 6, 'React Search/Filter Bar & Idempotency', TRACKS.REACT, [
+      'Build responsive doctor search and filter bar in React with TypeScript',
+      'Connect state parameters to DRF filter query params and review Idempotency keys'
+    ]);
+    addDay(12, 2, 6, 'Customer Re-engagement & Security Lint', TRACKS.STARTUP, [
+      'Re-engage with local clinic contact or review slot-booking concurrency requirements',
+      'Run security lint checks (python manage.py check --deploy)'
+    ]);
+    addDay(13, 2, 6, 'YouTube Video #2 & API Docs Cleanup', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "What Happens When You Book a Doctor Online? (System Flow)"',
+      'Clean up API documentation and verify TypeScript models'
+    ]);
+    addDay(14, 2, 6, 'YouTube Video #2 & API Docs Cleanup', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "What Happens When You Book a Doctor Online? (System Flow)"',
+      'Clean up API documentation and verify TypeScript models'
+    ]);
+
+    addDay(15, 2, 7, 'Redis Core Concepts & Data Structures', TRACKS.REDIS, [
+      'Learn Redis core concepts and data structures (Strings, Hashes, Lists, Sets, Sorted Sets)',
+      'Spin up local Redis container and test via redis-cli'
+    ]);
+    addDay(16, 2, 7, 'Cache Invalidation & Cache-Aside Pattern', TRACKS.REDIS, [
+      'Study cache invalidation, TTL, and cache-aside patterns',
+      'Configure Django cache backend to use Redis, add caching decorators to low-mutation views'
+    ]);
+    addDay(17, 2, 7, 'Distributed Locks & Rate Limiter', TRACKS.REDIS, [
+      'Understand distributed locks and sliding-window rate limiters',
+      'Implement Redis-backed rate limiter on appointment booking endpoint'
+    ]);
+    addDay(18, 2, 7, 'React Query / Memoization Patterns', TRACKS.REACT, [
+      'Implement client-side caching or memoization patterns in React (React Query or custom hooks)',
+      'Minimize redundant network requests for static lookup data'
+    ]);
+    addDay(19, 2, 7, 'Benchmark API Performance', TRACKS.REDIS, [
+      'Benchmark API response times before/after Redis caching using Postman or Apache Bench',
+      'Check Redis memory usage and TTL expiration'
+    ]);
+    addDay(20, 2, 7, 'YouTube Video #3 & Redis Docs', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "Why Backend Engineers Rely on Redis"',
+      'Document Redis integration steps and container setup'
+    ]);
+    addDay(21, 2, 7, 'YouTube Video #3 & Redis Docs', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "Why Backend Engineers Rely on Redis"',
+      'Document Redis integration steps and container setup'
+    ]);
+
+    addDay(22, 2, 8, 'Async Task Queue Architecture', TRACKS.DJANGO, [
+      'Learn async task queue architecture: Message Brokers (Redis), Task Producers, Worker Nodes',
+      'Install Celery and configure Redis as broker and result backend'
+    ]);
+    addDay(23, 2, 8, 'Celery Task Serialization & Error Handling', TRACKS.DJANGO, [
+      'Understand task serialization, error handling, retries, idempotency',
+      'Write first Celery task to simulate sending async appointment confirmation notifications'
+    ]);
+    addDay(24, 2, 8, 'Celery Beat Periodic Tasks', TRACKS.DJANGO, [
+      'Learn cron-like scheduling using Celery Beat',
+      'Configure periodic background task to check unconfirmed/upcoming appointments'
+    ]);
+    addDay(25, 2, 8, 'React Booking UI & Celery Monitoring', TRACKS.REACT, [
+      'Wire React booking UI to Django appointment creation endpoint so responses return instantly',
+      'Monitor Celery worker logs for background notifications'
+    ]);
+    addDay(26, 2, 8, 'Full Integration Run & Code Cleanup', TRACKS.STARTUP, [
+      'Perform full integration run: Login with JWT → Filter doctors → Book appointment → Verify Redis rate-limiting → Check Celery logs',
+      'Clean up code repositories'
+    ]);
+    addDay(27, 2, 8, 'YouTube Video #4 & Month 2 Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "Why Traditional Databases Become Slow at Scale"',
+      'Evaluate Month 2 progress and prepare for Month 3'
+    ]);
+    addDay(28, 2, 8, 'YouTube Video #4 & Month 2 Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "Why Traditional Databases Become Slow at Scale"',
+      'Evaluate Month 2 progress and prepare for Month 3'
+    ]);
+
+    // ---------- MONTH 3 ----------
+    addDay(1, 3, 9, 'Linux File Hierarchy & Permissions', TRACKS.DOCKER, [
+      'Learn Linux directory hierarchy (/etc, /var, /home), file permissions (chmod, chown), user/group management',
+      'Audit project file structures',
+      'Outline YouTube Video #1: "I Containerized My Startup Using Docker: Here is What Broke"'
+    ]);
+    addDay(2, 3, 9, 'Processes, Signals & systemd Services', TRACKS.DOCKER, [
+      'Understand background vs foreground processes, ps, top/htop, signals (SIGTERM, SIGKILL)',
+      'Learn custom systemd background services'
+    ]);
+    addDay(3, 3, 9, 'SSH, Key Pairs & sshd Hardening', TRACKS.DOCKER, [
+      'Master SSH, public/private key pairs, ssh-keygen, hardening sshd_config',
+      'Set up local passwordless SSH authentication'
+    ]);
+    addDay(4, 3, 9, 'Cron & Bash Scripting for Ops', TRACKS.DOCKER, [
+      'Learn cron syntax and write basic shell scripting (bash) for operational tasks',
+      'Write backup script automating local PostgreSQL database dumps'
+    ]);
+    addDay(5, 3, 9, 'Secret Management & Log Viewing', TRACKS.STARTUP, [
+      'Review local environment files, ensure secrets are separated from source code',
+      'Practice navigating files and viewing logs (tail -f, grep)'
+    ]);
+    addDay(6, 3, 9, 'YouTube Video #1 & Linux Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "I Containerized My Startup Using Docker: Here is What Broke"',
+      'Review Linux file permission rules'
+    ]);
+    addDay(7, 3, 9, 'YouTube Video #1 & Linux Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "I Containerized My Startup Using Docker: Here is What Broke"',
+      'Review Linux file permission rules'
+    ]);
+
+    addDay(8, 3, 10, 'OSI/TCP-IP Models & Diagnostic Tools', TRACKS.HTTP, [
+      'Review OSI and TCP/IP models, packet routing, UDP vs TCP, port binding',
+      'Use diagnostic tools (netstat, ss, curl, ping)'
+    ]);
+    addDay(9, 3, 10, 'DNS Records & Recursive Resolution', TRACKS.HTTP, [
+      'Learn DNS records (A, CNAME, MX, TXT, NS), TTL, recursive resolution',
+      'Plan custom domain structure (app.yourclinic.com)'
+    ]);
+    addDay(10, 3, 10, 'Cryptography, PKI & TLS Handshakes', TRACKS.HTTP, [
+      'Understand asymmetric/symmetric cryptography, PKI, TLS handshakes',
+      'Learn how Let\'s Encrypt issues free SSL/TLS certificates via ACME'
+    ]);
+    addDay(11, 3, 10, 'Forward vs Reverse Proxies', TRACKS.DOCKER, [
+      'Contrast Forward Proxies vs Reverse Proxies',
+      'Map out production traffic flow: Internet → Nginx (Reverse Proxy) → Django App Server → PostgreSQL'
+    ]);
+    addDay(12, 3, 10, 'Cross-Origin Communication & CORS', TRACKS.REACT, [
+      'Verify how React frontend communicates with Django backend API across origins',
+      'Ensure CORS rules are fully understood'
+    ]);
+    addDay(13, 3, 10, 'YouTube Video #2 & Local DNS Testing', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "Why Localhost Works But Production Breaks"',
+      'Test local DNS modifications (/etc/hosts)'
+    ]);
+    addDay(14, 3, 10, 'YouTube Video #2 & Local DNS Testing', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "Why Localhost Works But Production Breaks"',
+      'Test local DNS modifications (/etc/hosts)'
+    ]);
+
+    addDay(15, 3, 11, 'Nginx Architecture & server/location Blocks', TRACKS.DOCKER, [
+      'Learn Nginx event-driven architecture, worker processes, nginx.conf syntax, server blocks, location matching',
+      'Install Nginx locally or in a test container'
+    ]);
+    addDay(16, 3, 11, 'Proxy Headers & Reverse Proxy Setup', TRACKS.DOCKER, [
+      'Understand proxy headers (X-Real-IP, X-Forwarded-For, X-Forwarded-Proto)',
+      'Write Nginx server block proxying HTTP requests from port 80 to Django on port 8000'
+    ]);
+    addDay(17, 3, 11, 'Serving SPA Static Assets', TRACKS.REACT, [
+      'Learn how to build production bundles for SPAs (npm run build)',
+      'Configure Nginx to serve static assets efficiently with try_files $uri $uri/ /index.html;'
+    ]);
+    addDay(18, 3, 11, 'SSL Termination & Secure Headers', TRACKS.DOCKER, [
+      'Learn Nginx SSL termination and secure header configuration (X-Frame-Options, CSP)',
+      'Add HTTP-to-HTTPS redirect blocks'
+    ]);
+    addDay(19, 3, 11, 'Upstream Blocks & Load Balancing', TRACKS.DOCKER, [
+      'Study Nginx upstream blocks and load balancing algorithms (Round Robin, Least Connections)',
+      'Test local Nginx config using nginx -t'
+    ]);
+    addDay(20, 3, 11, 'YouTube Video #3 & Routing Troubleshoot', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "What is a Reverse Proxy? Nginx Explained for Developers"',
+      'Troubleshoot routing conflicts'
+    ]);
+    addDay(21, 3, 11, 'YouTube Video #3 & Routing Troubleshoot', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "What is a Reverse Proxy? Nginx Explained for Developers"',
+      'Troubleshoot routing conflicts'
+    ]);
+
+    addDay(22, 3, 12, 'Dockerfiles & Multi-Stage Builds (Django)', TRACKS.DOCKER, [
+      'Learn Docker core concepts: Images, Containers, Layers, Dockerfiles, caching',
+      'Write optimized multi-stage Dockerfile for Django backend'
+    ]);
+    addDay(23, 3, 12, 'Multi-Stage Docker for React', TRACKS.DOCKER, [
+      'Understand multi-stage Docker builds for React',
+      'Write frontend Dockerfile compiling with Node and copying static outputs into Nginx runtime container'
+    ]);
+    addDay(24, 3, 12, 'Docker Networks & Volumes', TRACKS.DOCKER, [
+      'Learn Docker bridge networks and volumes for data persistence',
+      'Configure named volumes for PostgreSQL data directory so records survive container restarts'
+    ]);
+    addDay(25, 3, 12, 'Docker Compose Full Stack', TRACKS.DOCKER, [
+      'Master docker-compose.yml syntax, environment variable interpolation, depends_on',
+      'Write full stack docker-compose file uniting frontend, backend, DB, Redis, Celery worker'
+    ]);
+    addDay(26, 3, 12, 'Full Stack Boot & Persistence Test', TRACKS.DOCKER, [
+      'Run docker compose up --build and verify entire clinic application boots cleanly',
+      'Test data persistence with docker compose down -v'
+    ]);
+    addDay(27, 3, 12, 'YouTube Video #4 & Container Audit', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "How Tech Startups Actually Deploy Their Backends"',
+      'Audit container sizes and prepare for Month 4'
+    ]);
+    addDay(28, 3, 12, 'YouTube Video #4 & Container Audit', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "How Tech Startups Actually Deploy Their Backends"',
+      'Audit container sizes and prepare for Month 4'
+    ]);
+
+    // ---------- MONTH 4 ----------
+    addDay(1, 4, 13, 'AWS Core Services & IAM Setup', TRACKS.AWS, [
+      'Learn Regions, AZs, Edge Locations, core services (EC2, RDS, S3, Route 53)',
+      'Set up AWS Free Tier, create IAM admin user with MFA',
+      'Outline YouTube Video #1: "I Deployed My Startup to AWS: Complete Architecture Breakdown"'
+    ]);
+    addDay(2, 4, 13, 'VPC Architecture: Subnets, IGW, Route Tables', TRACKS.AWS, [
+      'Understand VPC architecture: IGW, Route Tables, Public Subnets, Private Subnets',
+      'Build custom VPC with public subnets (frontend proxy) and private subnets (backend/DB)'
+    ]);
+    addDay(3, 4, 13, 'Security Groups & Firewall Rules', TRACKS.AWS, [
+      'Learn stateful AWS Security Groups',
+      'Configure rules: allow inbound 80/443 from anywhere, 22 from your IP, DB ports only from backend'
+    ]);
+    addDay(4, 4, 13, 'IAM Policies, Users & Roles', TRACKS.AWS, [
+      'Learn IAM policies, users, roles',
+      'Create IAM role for EC2 deployment instance to securely access S3 buckets'
+    ]);
+    addDay(5, 4, 13, 'AWS Budgets & Billing Alarms', TRACKS.STARTUP, [
+      'Set up AWS Budgets and Billing Alarms ($5-$10 threshold) to prevent unexpected charges',
+      'Audit network architecture diagrams'
+    ]);
+    addDay(6, 4, 13, 'YouTube Video #1 & VPC Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "I Deployed My Startup to AWS: Complete Architecture Breakdown"',
+      'Review VPC routing tables'
+    ]);
+    addDay(7, 4, 13, 'YouTube Video #1 & VPC Review', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "I Deployed My Startup to AWS: Complete Architecture Breakdown"',
+      'Review VPC routing tables'
+    ]);
+
+    addDay(8, 4, 14, 'EC2 Instances, AMIs & Elastic IPs', TRACKS.AWS, [
+      'Understand EC2 instance types (t3.small), AMIs, Elastic IPs',
+      'Launch Ubuntu EC2 instance, attach Elastic IP, test secure SSH login'
+    ]);
+    addDay(9, 4, 14, 'Docker Engine Setup on EC2', TRACKS.AWS, [
+      'Learn server-side container runtime setup and permissions',
+      'SSH into EC2 and install Docker Engine and Docker Compose'
+    ]);
+    addDay(10, 4, 14, 'Amazon RDS PostgreSQL Setup', TRACKS.AWS, [
+      'Understand operational benefits of managed databases',
+      'Provision Amazon RDS PostgreSQL instance inside private subnets, ensure secure connectivity from EC2'
+    ]);
+    addDay(11, 4, 14, 'S3 Buckets & Django Storage', TRACKS.AWS, [
+      'Learn Amazon S3 buckets, object lifecycles, public access blocks',
+      'Create S3 bucket for user-uploaded files and configure Django-S3 storage libraries'
+    ]);
+    addDay(12, 4, 14, 'Connect Django to RDS & S3', TRACKS.AWS, [
+      'Update production .env on EC2 to link Django backend to RDS PostgreSQL and AWS S3 credentials',
+      'Test remote database migrations'
+    ]);
+    addDay(13, 4, 14, 'YouTube Video #2 & EC2-RDS Connectivity', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "CI/CD Explained: How Code Moves from Git to Production Automatically"',
+      'Verify EC2-to-RDS internal connectivity'
+    ]);
+    addDay(14, 4, 14, 'YouTube Video #2 & EC2-RDS Connectivity', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "CI/CD Explained: How Code Moves from Git to Production Automatically"',
+      'Verify EC2-to-RDS internal connectivity'
+    ]);
+
+    addDay(15, 4, 15, 'GitHub Actions Workflow Basics', TRACKS.AWS, [
+      'Learn CI/CD, workflow triggers, runners, jobs, steps in GitHub Actions',
+      'Create workflow directory structure (.github/workflows/deploy.yml)'
+    ]);
+    addDay(16, 4, 15, 'Managing Deployment Secrets', TRACKS.AWS, [
+      'Understand secure management of deployment secrets',
+      'Add repository secrets: EC2_HOST, EC2_USER, EC2_SSH_KEY'
+    ]);
+    addDay(17, 4, 15, 'Deployment Steps: SSH, Docker Compose', TRACKS.AWS, [
+      'Master workflow step syntax for checking out code, setting up SSH keys, running remote commands',
+      'Execute docker compose up --build -d'
+    ]);
+    addDay(18, 4, 15, 'Automated Tests in CI', TRACKS.AWS, [
+      'Learn how to run automated unit and type-checking tests inside CI runners before deployment',
+      'Add preliminary CI check jobs'
+    ]);
+    addDay(19, 4, 15, 'Trigger Live Deployment', TRACKS.AWS, [
+      'Make minor text change in React code, commit, push to main',
+      'Watch GitHub Actions execute live deployment and verify automatic website updates'
+    ]);
+    addDay(20, 4, 15, 'YouTube Video #3 & Pipeline Troubleshoot', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "How Much Does It Actually Cost to Run a SaaS on AWS?"',
+      'Troubleshoot pipeline permission or cache issues'
+    ]);
+    addDay(21, 4, 15, 'YouTube Video #3 & Pipeline Troubleshoot', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "How Much Does It Actually Cost to Run a SaaS on AWS?"',
+      'Troubleshoot pipeline permission or cache issues'
+    ]);
+
+    addDay(22, 4, 16, 'Route 53 DNS & A Records', TRACKS.AWS, [
+      'Learn DNS routing policies and hosted zones',
+      'Configure Route 53 to point custom domain to EC2 Elastic IP via A record'
+    ]);
+    addDay(23, 4, 16, 'Let\'s Encrypt SSL with Certbot', TRACKS.AWS, [
+      'Understand automated certificate generation using Certbot',
+      'Install Certbot inside Nginx environment to issue free SSL certificate for HTTPS'
+    ]);
+    addDay(24, 4, 16, 'CloudWatch Monitoring & Metrics', TRACKS.AWS, [
+      'Learn cloud observability, centralized log aggregation, system metrics',
+      'Set up basic AWS CloudWatch metrics to monitor EC2 CPU load and storage space'
+    ]);
+    addDay(25, 4, 16, 'Production Smoke Test', TRACKS.STARTUP, [
+      'Perform full end-to-end production smoke test: HTTPS → search doctor → book slot → verify RDS updates → check Celery logs'
+    ]);
+    addDay(26, 4, 16, 'Freeze Architecture & Document Topology', TRACKS.STARTUP, [
+      'Freeze major architectural additions',
+      'Clean up staging branches, document AWS architecture topology, prepare for user acquisition'
+    ]);
+    addDay(27, 4, 16, 'YouTube Video #4 & Celebration', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "Why Monitoring Matters Before Production Breaks"',
+      'Celebrate having a live production cloud app!'
+    ]);
+    addDay(28, 4, 16, 'YouTube Video #4 & Celebration', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "Why Monitoring Matters Before Production Breaks"',
+      'Celebrate having a live production cloud app!'
+    ]);
+
+    // ---------- MONTH 5 ----------
+    addDay(1, 5, 17, 'Latency, Throughput & Reliability Metrics', TRACKS.SYS_DESIGN, [
+      'Learn core metrics: Latency vs Throughput, p99/p95 response times, Availability (Four Nines), Reliability',
+      'Audit current clinic backend bottlenecks',
+      'Outline YouTube Video #1: "How Appointment Systems Prevent Double Bookings at Scale"'
+    ]);
+    addDay(2, 5, 17, 'Vertical vs Horizontal Scaling & CAP Theorem', TRACKS.SYS_DESIGN, [
+      'Understand vertical vs horizontal scaling, dive deep into CAP Theorem',
+      'Map out how clinic app handles network partitions and consistency tradeoffs'
+    ]);
+    addDay(3, 5, 17, 'Load Balancing: L4 vs L7, ALB Design', TRACKS.SYS_DESIGN, [
+      'Learn load balancing algorithms and Layer 4 vs Layer 7 balancing',
+      'Design multi-instance Django server architecture behind AWS Application Load Balancer'
+    ]);
+    addDay(4, 5, 17, 'Caching Patterns: Cache-Aside, Write-Through', TRACKS.SYS_DESIGN, [
+      'Study caching patterns: Cache-Aside, Write-Through, Cache Invalidation',
+      'Review Redis caching layers for search directories'
+    ]);
+    addDay(5, 5, 17, 'User Feedback & UX Friction Review', TRACKS.STARTUP, [
+      'Check active clinic user numbers',
+      'Review customer feedback to identify UX friction points',
+      'Practice explaining CAP theorem'
+    ]);
+    addDay(6, 5, 17, 'YouTube Video #1 & Traffic Distribution', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "How Appointment Systems Prevent Double Bookings at Scale"',
+      'Consolidate notes on traffic distribution'
+    ]);
+    addDay(7, 5, 17, 'YouTube Video #1 & Traffic Distribution', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "How Appointment Systems Prevent Double Bookings at Scale"',
+      'Consolidate notes on traffic distribution'
+    ]);
+
+    addDay(8, 5, 18, 'Master-Slave Replication & Read Replicas', TRACKS.POSTGRES, [
+      'Master Master-Slave replication, synchronous vs asynchronous replication, replication lag',
+      'Configure read-replica routing logic in Django'
+    ]);
+    addDay(9, 5, 18, 'Composite Indexes & Query Execution Plans', TRACKS.POSTGRES, [
+      'Study B-Trees, composite indexes, covering indexes, query execution plans (EXPLAIN ANALYZE)',
+      'Analyze slow queries and add composite indexes for multi-column searches'
+    ]);
+    addDay(10, 5, 18, 'Table Partitioning & Sharding Strategies', TRACKS.POSTGRES, [
+      'Understand table partitioning and horizontal sharding strategies',
+      'Design sharding strategy for historical appointment logs'
+    ]);
+    addDay(11, 5, 18, 'Connection Pooling (PgBouncer)', TRACKS.POSTGRES, [
+      'Learn why opening new DB connections per HTTP request hurts performance, how connection poolers solve it',
+      'Configure persistent connection pooling parameters'
+    ]);
+    addDay(12, 5, 18, 'RDS Storage Evaluation & Query Optimization', TRACKS.POSTGRES, [
+      'Evaluate database storage usage on AWS RDS',
+      'Optimize query performance for doctor slot availability lookups'
+    ]);
+    addDay(13, 5, 18, 'YouTube Video #2 & Failover Testing', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "System Design: How to Design a Million-User Booking Platform"',
+      'Test database failover handling'
+    ]);
+    addDay(14, 5, 18, 'YouTube Video #2 & Failover Testing', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "System Design: How to Design a Million-User Booking Platform"',
+      'Test database failover handling'
+    ]);
+
+    addDay(15, 5, 19, 'Row Locking & Race Conditions', TRACKS.SYS_DESIGN, [
+      'Learn how concurrent requests cause race conditions in appointment bookings',
+      'Implement database-level row locking (SELECT ... FOR UPDATE) in Django transactions'
+    ]);
+    addDay(16, 5, 19, 'Redis Redlock & Distributed Locks', TRACKS.SYS_DESIGN, [
+      'Understand distributed lock managers and the Redis Redlock algorithm',
+      'Implement Redis-backed distributed lock around high-contention slot reservation endpoints'
+    ]);
+    addDay(17, 5, 19, 'Pub/Sub Patterns & Message Brokers', TRACKS.SYS_DESIGN, [
+      'Learn Pub/Sub patterns and message brokers',
+      'Map out how Celery background notification queue functions as lightweight event dispatcher'
+    ]);
+    addDay(18, 5, 19, 'Circuit Breakers, Backoff, Idempotency', TRACKS.SYS_DESIGN, [
+      'Study Circuit Breakers, exponential backoff, jitter, idempotency keys',
+      'Ensure external integrations implement robust retry logic and idempotency protection'
+    ]);
+    addDay(19, 5, 19, 'Load Testing with k6 / JMeter', TRACKS.SYS_DESIGN, [
+      'Simulate concurrent appointment booking load using k6 or JMeter',
+      'Verify row-locking and Redis locks successfully prevent double-booking collisions'
+    ]);
+    addDay(20, 5, 19, 'YouTube Video #3 & Concurrency Docs', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "I Pitched My Startup to Real Businesses: What Happened"',
+      'Document concurrency control mechanisms'
+    ]);
+    addDay(21, 5, 19, 'YouTube Video #3 & Concurrency Docs', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "I Pitched My Startup to Real Businesses: What Happened"',
+      'Document concurrency control mechanisms'
+    ]);
+
+    addDay(22, 5, 20, 'Real-Time Chat / WebSockets Design', TRACKS.SYS_DESIGN, [
+      'Design real-time chat systems or notification dispatchers using WebSockets, Long Polling, Pub/Sub',
+      'Sketch out real-time doctor-patient chat notifications'
+    ]);
+    addDay(23, 5, 20, 'Hyper-local Search & Geospatial Indexing', TRACKS.SYS_DESIGN, [
+      'Design hyper-local search and booking engines combining geospatial indexing (PostGIS) and caching',
+      'Write comprehensive system design doc for nationwide healthcare platform'
+    ]);
+    addDay(24, 5, 20, 'SaaS Metrics: CAC, LTV, Churn, MRR', TRACKS.STARTUP, [
+      'Learn startup SaaS metrics: CAC, LTV, Churn Rate, MRR',
+      'Reach out to local clinics and independent doctors to expand active user base from 10 towards 50 users'
+    ]);
+    addDay(25, 5, 20, 'User Feedback Integration & Pricing Review', TRACKS.STARTUP, [
+      'Incorporate direct feedback from early clinic users',
+      'Streamline admin dashboard workflows and fix friction in patient slot check-ins',
+      'Review SaaS pricing models'
+    ]);
+    addDay(26, 5, 20, 'Architecture Review & Production Stability', TRACKS.STARTUP, [
+      'Review entire system architecture (React/TS → Nginx → Django Load Balanced → Redis → Postgres Master/Replica with Row Locking)',
+      'Ensure production stability'
+    ]);
+    addDay(27, 5, 20, 'YouTube Video #4 & Growth Evaluation', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "Building in Public: Lessons from My First 50 Users"',
+      'Evaluate growth metrics and prepare for Month 6'
+    ]);
+    addDay(28, 5, 20, 'YouTube Video #4 & Growth Evaluation', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "Building in Public: Lessons from My First 50 Users"',
+      'Evaluate growth metrics and prepare for Month 6'
+    ]);
+
+    // ---------- MONTH 6 ----------
+    addDay(1, 6, 21, 'Go Setup, Types, Variables, Constants', TRACKS.GO, [
+      'Install Go, understand workspace structure (go mod), basic types, variables, constants',
+      'Write first Go CLI script',
+      'Outline YouTube Video #1: "Can an Independent Startup Compete with Giants Like Practo?"'
+    ]);
+    addDay(2, 6, 21, 'Pointers, Structs, Receivers', TRACKS.GO, [
+      'Master pointers (*, &), struct declarations, value vs pointer receivers, memory allocation',
+      'Define custom domain entities in Go structs'
+    ]);
+    addDay(3, 6, 21, 'Go Interfaces & Mock Services', TRACKS.GO, [
+      'Learn Go\'s implicit interface implementation',
+      'Write mock service interface in Go for notification dispatchers'
+    ]);
+    addDay(4, 6, 21, 'Error Handling in Go', TRACKS.GO, [
+      'Understand Go\'s explicit if err != nil error handling paradigm instead of traditional exceptions',
+      'Implement custom error types and error wrapping'
+    ]);
+    addDay(5, 6, 21, 'User Metrics Review & Go Semantics', TRACKS.STARTUP, [
+      'Check clinic app active user metrics, retention rates, weekly booking volumes',
+      'Review pointer vs value semantics'
+    ]);
+    addDay(6, 6, 21, 'YouTube Video #1 & Go Syntax Notes', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "Can an Independent Startup Compete with Giants Like Practo?"',
+      'Consolidate Go syntax notes'
+    ]);
+    addDay(7, 6, 21, 'YouTube Video #1 & Go Syntax Notes', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #1: "Can an Independent Startup Compete with Giants Like Practo?"',
+      'Consolidate Go syntax notes'
+    ]);
+
+    addDay(8, 6, 22, 'Goroutines & Lightweight Threads', TRACKS.GO, [
+      'Learn what goroutines are (lightweight managed threads) and how they differ from OS threads',
+      'Write concurrent script running independent tasks using go'
+    ]);
+    addDay(9, 6, 22, 'Channels & Producer-Consumer Pipeline', TRACKS.GO, [
+      'Understand channel communication, blocking behavior, buffered vs unbuffered channels',
+      'Implement producer-consumer worker pipeline'
+    ]);
+    addDay(10, 6, 22, 'Select Statement & Worker Pools', TRACKS.GO, [
+      'Master select statement for multiplexing channel operations',
+      'Build concurrent task worker pool in Go for background notification triggers'
+    ]);
+    addDay(11, 6, 22, 'Context Package for Timeouts & Cancellation', TRACKS.GO, [
+      'Learn how context package controls timeouts, deadlines, cancellation signals across request lifecycles',
+      'Add context timeouts to HTTP client requests'
+    ]);
+    addDay(12, 6, 22, 'Cloud Cost Audit & Race Detection', TRACKS.STARTUP, [
+      'Audit cloud infrastructure costs and verify system efficiency under load',
+      'Review concurrency pitfalls like data races (go test -race)'
+    ]);
+    addDay(13, 6, 22, 'YouTube Video #2 & Channel Patterns', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "Why India\'s Healthcare Booking Market is Uniquely Difficult"',
+      'Test channel communication patterns'
+    ]);
+    addDay(14, 6, 22, 'YouTube Video #2 & Channel Patterns', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #2: "Why India\'s Healthcare Booking Market is Uniquely Difficult"',
+      'Test channel communication patterns'
+    ]);
+
+    addDay(15, 6, 23, 'net/http Server & Custom Routing', TRACKS.GO, [
+      'Learn how Go\'s built-in net/http package handles routing, request parsing, response writing',
+      'Build basic HTTP server with custom routing endpoints'
+    ]);
+    addDay(16, 6, 23, 'JSON Serialization & Handlers', TRACKS.GO, [
+      'Master JSON serialization (encoding/json), struct tags, payload validation in Go',
+      'Write handlers accepting JSON POST requests for appointment bookings'
+    ]);
+    addDay(17, 6, 23, 'database/sql & pgx Connection Pooling', TRACKS.GO, [
+      'Learn database connectivity in Go using database/sql or pgx, connection pooling, parameterized queries',
+      'Connect Go service to PostgreSQL'
+    ]);
+    addDay(18, 6, 23, 'Go Middleware & JWT Auth', TRACKS.GO, [
+      'Understand middleware in Go as chain of execution wrapping HTTP handlers',
+      'Write custom JWT authentication middleware in Go'
+    ]);
+    addDay(19, 6, 23, 'Go Testing: Table-Driven & httptest', TRACKS.GO, [
+      'Learn Go\'s built-in unit testing framework, table-driven tests, HTTP handler testing using net/http/httptest',
+      'Write unit tests for core booking validation'
+    ]);
+    addDay(20, 6, 23, 'YouTube Video #3 & Go Module Cleanup', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "Why I Started Learning Go After Building Python Backends"',
+      'Clean up dependency modules (go mod tidy)'
+    ]);
+    addDay(21, 6, 23, 'YouTube Video #3 & Go Module Cleanup', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #3: "Why I Started Learning Go After Building Python Backends"',
+      'Clean up dependency modules (go mod tidy)'
+    ]);
+
+    addDay(22, 6, 24, 'Django vs Go: When to Use Which', TRACKS.SYS_DESIGN, [
+      'Analyze when to use Django (rapid dev, rich ORM, admin) vs Go (high concurrency, low footprint, raw speed)',
+      'Document architectural guidelines'
+    ]);
+    addDay(23, 6, 24, 'Multi-Stage Docker for Go Binaries', TRACKS.DOCKER, [
+      'Understand multi-stage Docker builds for compiled Go binaries resulting in tiny, secure container images',
+      'Write optimized Go Dockerfile using scratch or alpine'
+    ]);
+    addDay(24, 6, 24, 'Startup Metrics & Pivot Decision', TRACKS.STARTUP, [
+      'Evaluate 6-month startup metrics: clinic signups, retention, CAC, LTV, MRR, burn rate',
+      'Decide on next-phase scaling or pivoting'
+    ]);
+    addDay(25, 6, 24, 'Portfolio & Resume Consolidation', TRACKS.STARTUP, [
+      'Consolidate 6-month technical achievements (Django, React+TS, Postgres, Redis, DevOps, System Design, Go)',
+      'Update resume and GitHub portfolios'
+    ]);
+    addDay(26, 6, 24, 'Learning Method Reflection', TRACKS.STARTUP, [
+      'Reflect on learning method (Learn → Build → Break → Fix → Explain) and how tripartite track accelerated growth'
+    ]);
+    addDay(27, 6, 24, 'YouTube Video #4 & Final Celebration', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "I Built a Healthcare Startup: Complete 6-Month Post-Mortem & Revenue Review"',
+      'Celebrate completing rigorous 6-month journey!'
+    ]);
+    addDay(28, 6, 24, 'YouTube Video #4 & Final Celebration', TRACKS.YOUTUBE, [
+      'Record, edit, publish YouTube Video #4: "I Built a Healthcare Startup: Complete 6-Month Post-Mortem & Revenue Review"',
+      'Celebrate completing rigorous 6-month journey!'
+    ]);
+
+    // ==================== DEEP STUDY RESOURCES (single declaration) ====================
+    const STUDY_RESOURCES = {
+      "http": [
+        ["MDN HTTP overview", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview"],
+        ["MDN HTTP methods", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods"],
+        ["MDN status codes", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status"]
+      ],
+      "websec": [
+        ["MDN CORS", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS"],
+        ["MDN Cookies", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies"],
+        ["MDN TLS", "https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security"]
+      ],
+      "ts": [
+        ["TypeScript Handbook", "https://www.typescriptlang.org/docs/handbook/intro.html"],
+        ["Everyday Types", "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html"],
+        ["Narrowing", "https://www.typescriptlang.org/docs/handbook/2/narrowing.html"]
+      ],
+      "react": [
+        ["React Learn", "https://react.dev/learn"],
+        ["Managing State", "https://react.dev/learn/managing-state"],
+        ["React Escape Hatches", "https://react.dev/learn/escape-hatches"]
+      ],
+      "vite": [
+        ["Vite Guide", "https://vite.dev/guide/"],
+        ["Vite Config", "https://vite.dev/config/"],
+        ["Vite Static Deploy", "https://vite.dev/guide/static-deploy.html"]
+      ],
+      "router": [
+        ["React Router Start", "https://reactrouter.com/start/declarative/installation"],
+        ["Routing", "https://reactrouter.com/start/declarative/routing"],
+        ["Data Loading", "https://reactrouter.com/start/framework/data-loading"]
+      ],
+      "axios": [
+        ["Axios Intro", "https://axios-http.com/docs/intro"],
+        ["Axios Interceptors", "https://axios-http.com/docs/interceptors"],
+        ["Axios Errors", "https://axios-http.com/docs/handling_errors"]
+      ],
+      "django": [
+        ["Django Tutorial", "https://docs.djangoproject.com/en/stable/intro/tutorial01/"],
+        ["Django Models", "https://docs.djangoproject.com/en/stable/topics/db/models/"],
+        ["Django HTTP", "https://docs.djangoproject.com/en/stable/topics/http/"]
+      ],
+      "django_arch": [
+        ["Django Middleware", "https://docs.djangoproject.com/en/stable/topics/http/middleware/"],
+        ["Django Settings", "https://docs.djangoproject.com/en/stable/topics/settings/"],
+        ["Django Applications", "https://docs.djangoproject.com/en/stable/ref/applications/"]
+      ],
+      "drf": [
+        ["DRF Serializers", "https://www.django-rest-framework.org/api-guide/serializers/"],
+        ["DRF Views/ViewSets", "https://www.django-rest-framework.org/api-guide/viewsets/"],
+        ["DRF Permissions", "https://www.django-rest-framework.org/api-guide/permissions/"]
+      ],
+      "drf_adv": [
+        ["DRF Pagination", "https://www.django-rest-framework.org/api-guide/pagination/"],
+        ["DRF Filtering", "https://www.django-rest-framework.org/api-guide/filtering/"],
+        ["DRF Throttling", "https://www.django-rest-framework.org/api-guide/throttling/"]
+      ],
+      "files": [
+        ["Django Files", "https://docs.djangoproject.com/en/stable/topics/files/"],
+        ["Django Storage API", "https://docs.djangoproject.com/en/stable/ref/files/storage/"],
+        ["Static Files", "https://docs.djangoproject.com/en/stable/howto/static-files/"]
+      ],
+      "celery": [
+        ["Celery Introduction", "https://docs.celeryq.dev/en/stable/getting-started/introduction.html"],
+        ["Celery Tasks", "https://docs.celeryq.dev/en/stable/userguide/tasks.html"],
+        ["Celery Periodic Tasks", "https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html"]
+      ],
+      "pg": [
+        ["PostgreSQL Tutorial", "https://www.postgresql.org/docs/current/tutorial.html"],
+        ["PostgreSQL MVCC", "https://www.postgresql.org/docs/current/mvcc.html"],
+        ["PostgreSQL Transactions", "https://www.postgresql.org/docs/current/tutorial-transactions.html"]
+      ],
+      "pgidx": [
+        ["PostgreSQL Indexes", "https://www.postgresql.org/docs/current/indexes.html"],
+        ["EXPLAIN", "https://www.postgresql.org/docs/current/sql-explain.html"],
+        ["Index Types", "https://www.postgresql.org/docs/current/indexes-types.html"]
+      ],
+      "pgadv": [
+        ["Replication/HA", "https://www.postgresql.org/docs/current/high-availability.html"],
+        ["Partitioning", "https://www.postgresql.org/docs/current/ddl-partitioning.html"],
+        ["Explicit Locking", "https://www.postgresql.org/docs/current/explicit-locking.html"]
+      ],
+      "redis": [
+        ["Redis Data Types", "https://redis.io/docs/latest/develop/data-types/"],
+        ["Redis Commands", "https://redis.io/docs/latest/commands/"],
+        ["Redis Developer Docs", "https://redis.io/docs/latest/develop/"]
+      ],
+      "rediscache": [
+        ["Redis Patterns", "https://redis.io/docs/latest/develop/use/patterns/"],
+        ["Key Eviction", "https://redis.io/docs/latest/reference/eviction/"],
+        ["EXPIRE", "https://redis.io/docs/latest/commands/expire/"]
+      ],
+      "redislock": [
+        ["Distributed Locks", "https://redis.io/docs/latest/develop/use/patterns/distributed-locks/"],
+        ["Redis Transactions", "https://redis.io/docs/latest/develop/using-commands/transactions/"],
+        ["SET command", "https://redis.io/docs/latest/commands/set/"]
+      ],
+      "linux": [
+        ["Linux man-pages", "https://man7.org/linux/man-pages/"],
+        ["Linux Command Line book", "https://linuxcommand.org/tlcl.php"],
+        ["Ubuntu CLI tutorial", "https://ubuntu.com/tutorials/command-line-for-beginners"]
+      ],
+      "ssh": [
+        ["OpenSSH ssh", "https://man.openbsd.org/ssh"],
+        ["ssh-keygen", "https://man.openbsd.org/ssh-keygen"],
+        ["Ubuntu OpenSSH", "https://documentation.ubuntu.com/server/how-to/security/openssh-server/"]
+      ],
+      "bash": [
+        ["GNU Bash Reference", "https://www.gnu.org/software/bash/manual/bash.html"],
+        ["Bash Guide", "https://mywiki.wooledge.org/BashGuide"],
+        ["crontab", "https://man7.org/linux/man-pages/man5/crontab.5.html"]
+      ],
+      "net": [
+        ["Cloudflare TCP/IP", "https://www.cloudflare.com/learning/network-layer/what-is-tcp-ip/"],
+        ["Cloudflare DNS", "https://www.cloudflare.com/learning/dns/what-is-dns/"],
+        ["MDN HTTP", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview"]
+      ],
+      "tls": [
+        ["Cloudflare DNS", "https://www.cloudflare.com/learning/dns/what-is-dns/"],
+        ["Let's Encrypt", "https://letsencrypt.org/how-it-works/"],
+        ["MDN TLS", "https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security"]
+      ],
+      "nginx": [
+        ["NGINX Beginner Guide", "https://nginx.org/en/docs/beginners_guide.html"],
+        ["NGINX Reverse Proxy", "https://nginx.org/en/docs/http/ngx_http_proxy_module.html"],
+        ["NGINX Load Balancing", "https://nginx.org/en/docs/http/load_balancing.html"]
+      ],
+      "nginxsec": [
+        ["NGINX HTTPS", "https://nginx.org/en/docs/http/configuring_https_servers.html"],
+        ["MDN CSP", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy"],
+        ["MDN X-Frame-Options", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Frame-Options"]
+      ],
+      "docker": [
+        ["Docker Get Started", "https://docs.docker.com/get-started/"],
+        ["Dockerfile Reference", "https://docs.docker.com/reference/dockerfile/"],
+        ["Multi-stage Builds", "https://docs.docker.com/get-started/docker-concepts/building-images/multi-stage-builds/"]
+      ],
+      "compose": [
+        ["Compose Quickstart", "https://docs.docker.com/compose/gettingstarted/"],
+        ["Compose File Reference", "https://docs.docker.com/reference/compose-file/"],
+        ["Compose Networking", "https://docs.docker.com/compose/how-tos/networking/"]
+      ],
+      "aws": [
+        ["AWS Getting Started", "https://aws.amazon.com/getting-started/"],
+        ["EC2 Docs", "https://docs.aws.amazon.com/ec2/"],
+        ["Well-Architected", "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"]
+      ],
+      "vpc": [
+        ["AWS VPC", "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"],
+        ["Route Tables", "https://docs.aws.amazon.com/vpc/latest/userguide/route-tables.html"],
+        ["Security Groups", "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"]
+      ],
+      "iam": [
+        ["IAM Guide", "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"],
+        ["IAM Policies", "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html"],
+        ["IAM Best Practices", "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"]
+      ],
+      "rds": [
+        ["RDS Guide", "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"],
+        ["RDS PostgreSQL", "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html"],
+        ["RDS Multi-AZ", "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"]
+      ],
+      "s3": [
+        ["S3 User Guide", "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"],
+        ["S3 Security", "https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html"],
+        ["S3 Storage Classes", "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"]
+      ],
+      "cicd": [
+        ["GitHub Actions", "https://docs.github.com/en/actions"],
+        ["Workflow Syntax", "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax"],
+        ["AWS Deployment Options", "https://docs.aws.amazon.com/whitepapers/latest/overview-deployment-options/overview.html"]
+      ],
+      "dnsmon": [
+        ["Route 53", "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"],
+        ["CloudWatch", "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html"],
+        ["Certbot", "https://certbot.eff.org/instructions"]
+      ],
+      "sys": [
+        ["AWS Well-Architected", "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"],
+        ["Google SRE Book", "https://sre.google/sre-book/table-of-contents/"],
+        ["Cloudflare Learning", "https://www.cloudflare.com/learning/"]
+      ],
+      "resilience": [
+        ["SRE Overload", "https://sre.google/sre-book/handling-overload/"],
+        ["SRE Cascading Failures", "https://sre.google/sre-book/addressing-cascading-failures/"],
+        ["AWS Reliability Pillar", "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"]
+      ],
+      "geo": [
+        ["MDN WebSockets", "https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"],
+        ["PostGIS Intro", "https://postgis.net/docs/using_postgis_dbmanagement.html"],
+        ["PostGIS Reference", "https://postgis.net/docs/reference.html"]
+      ],
+      "go": [
+        ["Go Tour", "https://go.dev/tour/"],
+        ["Effective Go", "https://go.dev/doc/effective_go"],
+        ["Go Spec", "https://go.dev/ref/spec"]
+      ],
+      "goconc": [
+        ["Go Concurrency", "https://go.dev/doc/effective_go#concurrency"],
+        ["Go Tour Concurrency", "https://go.dev/tour/concurrency/"],
+        ["Go Pipelines", "https://go.dev/blog/pipelines"]
+      ],
+      "goapi": [
+        ["net/http", "https://pkg.go.dev/net/http"],
+        ["encoding/json", "https://pkg.go.dev/encoding/json"],
+        ["database/sql", "https://pkg.go.dev/database/sql"]
+      ],
+      "gotest": [
+        ["testing package", "https://pkg.go.dev/testing"],
+        ["httptest", "https://pkg.go.dev/net/http/httptest"],
+        ["Race Detector", "https://go.dev/doc/articles/race_detector"]
+      ],
+      "startup": [
+        ["YC Startup Library", "https://www.ycombinator.com/library"],
+        ["YC — Talk to Users", "https://www.ycombinator.com/library/6g-how-to-talk-to-users"],
+        ["Startup School", "https://www.startupschool.org/"]
+      ],
+      "metrics": [
+        ["YC Startup Library", "https://www.ycombinator.com/library"],
+        ["Stripe SaaS Metrics", "https://stripe.com/resources/more/saas-metrics"],
+        ["OpenView SaaS Metrics", "https://openviewpartners.com/blog/saas-metrics/"]
+      ],
+      "youtube": [
+        ["YouTube Creator Academy", "https://creatoracademy.youtube.com/"],
+        ["YouTube Creator Tips", "https://support.google.com/youtube/topic/9257984"],
+        ["YouTube Analytics", "https://support.google.com/youtube/topic/9313691"]
+      ]
+    };
+
+    // ==================== DEEP STUDY RESOURCE RESOLVER ====================
+    function getStudyResourceKeys(d) {
+      const t = (d.title + " " + d.tasks.join(" ")).toLowerCase(), k = [];
+      const add = x => { if (STUDY_RESOURCES[x] && !k.includes(x)) k.push(x); };
+      if (/goroutine|channel|select statement|worker pool|race detection|concurr/.test(t)) add("goconc");
+      if (/net\/http|json serialization|handlers|http server|custom routing/.test(t)) add("goapi");
+      if (/go testing|table-driven|httptest/.test(t)) add("gotest");
+      if (/go setup|types|variables|constants|pointers|structs|receivers|interfaces|error handling|go semantics/.test(t)) add("go");
+      if (/serializer/.test(t)) add("drf");
+      if (/apiview|genericapiview|viewsets|router/.test(t)) add("drf");
+      if (/permission|authorization|authentication|jwt|token auth/.test(t)) add("drf");
+      if (/pagination|filtering|search|throttling/.test(t)) add("drf_adv");
+      if (/celery|async task|message broker|periodic task/.test(t)) add("celery");
+      if (/media file|file handling|image storage/.test(t)) add("files");
+      if (/normalization|schema design|joins|window functions|acid|transaction/.test(t)) add("pg");
+      if (/index|explain analyze|query execution/.test(t)) add("pgidx");
+      if (/replication|read replica|partitioning|sharding|row locking|locks|isolation/.test(t)) add("pgadv");
+      if (/redis core|data structures/.test(t)) add("redis");
+      if (/cache invalidation|cache-aside|ttl|caching/.test(t)) add("rediscache");
+      if (/distributed lock|redlock|rate limiter/.test(t)) add("redislock");
+      if (/linux|file hierarchy|permissions|processes|systemd|log viewing/.test(t)) add("linux");
+      if (/ssh|key pair|sshd/.test(t)) add("ssh");
+      if (/cron|bash|shell scripting/.test(t)) add("bash");
+      if (/osi|tcp\/ip|packet routing|udp|tcp|port binding|netstat|curl|ping/.test(t)) add("net");
+      if (/dns|tls|ssl|certificate|let's encrypt|acme/.test(t)) add("tls");
+      if (/nginx|reverse proxy|load balancing|upstream|proxy headers/.test(t)) add("nginx");
+      if (/ssl termination|secure headers|csp|x-frame/.test(t)) add("nginxsec");
+      if (/dockerfile|docker core|images|containers|layers|multi-stage/.test(t)) add("docker");
+      if (/compose|docker networks|volumes|bridge network|persistence/.test(t)) add("compose");
+      if (/vpc|subnets|internet gateway|route tables|security groups/.test(t)) add("vpc");
+      if (/iam|mfa|policies|roles/.test(t)) add("iam");
+      if (/rds|managed database/.test(t)) add("rds");
+      if (/\bs3\b|object storage/.test(t)) add("s3");
+      if (/github actions|ci\/cd|deployment secrets|automated tests in ci/.test(t)) add("cicd");
+      if (/route 53|cloudwatch|certbot|monitoring|metrics/.test(t)) add("dnsmon");
+      if (/\baws\b|ec2|cloud infrastructure/.test(t)) add("aws");
+      if (/latency|throughput|availability|reliability|scaling|cap theorem|load balancing|caching patterns/.test(t)) add("sys");
+      if (/circuit breaker|backoff|jitter|idempotency|failover/.test(t)) add("resilience");
+      if (/websocket|real-time chat|geospatial|postgis|hyper-local/.test(t)) add("geo");
+      if (/react|react query|authcontext|spa/.test(t)) add("react");
+      if (/typescript|interfaces|strict types/.test(t)) add("ts");
+      if (/\bvite\b/.test(t)) add("vite");
+      if (/react-router/.test(t)) add("router");
+      if (/axios|api client/.test(t)) add("axios");
+      if (/http\/https|http lifecycle|json payload/.test(t)) add("http");
+      if (/cors|cookies|sessions|xss|csrf/.test(t)) add("websec");
+      if (/django|middleware|models|monolithic|mvc|service layer|repository/.test(t)) add("django");
+      if (/middleware|logging|settings/.test(t) && /django/.test(t)) add("django_arch");
+      if (/cac|ltv|churn|mrr|burn rate|startup metrics|pricing|pivot|portfolio|resume/.test(t)) add("metrics");
+      if (/customer discovery|customer validation|talk to users|clinic workflow|target customer/.test(t)) add("startup");
+      if (/youtube|record, edit, publish/.test(t)) add("youtube");
+      const fallback = {
+        "HTTP & Web Foundations": "http",
+        "React & TypeScript": "react",
+        "Django & DRF": "django",
+        "PostgreSQL": "pg",
+        "Redis & Caching": "redis",
+        "Docker & Linux": "docker",
+        "AWS & Cloud": "aws",
+        "System Design": "sys",
+        "Go Language": "go",
+        "Startup & MVP": "startup",
+        "YouTube & Branding": "youtube"
+      };
+      if (!k.length) add(fallback[d.track]);
+      return k.slice(0, 3);
+    }
+
+    function renderStudyResources(d) {
+      const all = [], seen = new Set();
+      getStudyResourceKeys(d).forEach(key => STUDY_RESOURCES[key].forEach(r => {
+        if (!seen.has(r[1])) { seen.add(r[1]); all.push(r); }
+      }));
+      return `<div class="study-resources"><div class="study-resources-title">📚 Deep study resources</div><div class="study-resource-list">${all.slice(0, 6).map(r => `<a class="study-resource-link" href="${r[1]}" target="_blank" rel="noopener noreferrer">${r[0]} ↗</a>`).join("")}</div></div>`;
+    }
+
+    // ==================== STATE & LOCALSTORAGE PERSISTENCE ====================
+    const STORAGE_KEY = 'syllabus_dashboard_completed_tasks';
+
+    function loadCompletedTasks() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            return new Set(parsed);
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to load progress from localStorage', e);
+      }
+      return new Set();
+    }
+
+    function saveCompletedTasks() {
+      try {
+        const arr = Array.from(state.completedTasks);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+      } catch (e) {
+        console.warn('Failed to save progress to localStorage', e);
+      }
+    }
+
+    const state = {
+      selectedMonth: 1,
+      searchQuery: '',
+      completedTasks: loadCompletedTasks(),
+      collapsedWeeks: new Set()
+    };
+
+    // ✅ NO SEEDING — starts at 0%
+
+    // ==================== ACTIONS ====================
+    function toggleTask(month, day, taskIdx) {
+      const key = `${month}-${day}-${taskIdx}`;
+      if (state.completedTasks.has(key)) {
+        state.completedTasks.delete(key);
+      } else {
+        state.completedTasks.add(key);
+      }
+      saveCompletedTasks();
+      updateViz();
+    }
+
+    function toggleWeek(month, weekInMonth) {
+      const key = `${month}-${weekInMonth}`;
+      if (state.collapsedWeeks.has(key)) {
+        state.collapsedWeeks.delete(key);
+      } else {
+        state.collapsedWeeks.add(key);
+      }
+      updateViz();
+    }
+
+    function setMonth(m) {
+      state.selectedMonth = m;
+      updateViz();
+    }
+
+    // ==================== RENDERERS ====================
+    function renderHeader() {
+      let totalTasks = 0;
+      let completedCount = 0;
+      SYLLABUS_DATA.forEach(d => {
+        totalTasks += d.tasks.length;
+        d.tasks.forEach((_, idx) => {
+          if (state.completedTasks.has(`${d.month}-${d.day}-${idx}`)) completedCount++;
+        });
+      });
+      const pct = totalTasks > 0 ? Math.round((completedCount / totalTasks) * 100) : 0;
+
+      document.getElementById('progressText').textContent = `Overall Completion: ${completedCount} / ${totalTasks} tasks completed`;
+      document.getElementById('progressPct').textContent = `${pct}%`;
+      document.getElementById('progressBarFill').style.width = `${pct}%`;
+    }
+
+    function renderTabs() {
+      const container = document.getElementById('monthTabs');
+      let html = '';
+      for (let i = 0; i <= 6; i++) {
+        const isActive = state.selectedMonth === i;
+        const label = i === 0 ? 'All 168 Days' : `Month ${i}`;
+        html += `<button type="button" class="tab-btn ${isActive ? 'is-active' : ''}" onclick="setMonth(${i})">${label}</button>`;
+      }
+      container.innerHTML = html;
+    }
+
+    function renderSchedule() {
+      const container = document.getElementById('contentArea');
+      if (!container) return;
+
+      const query = state.searchQuery.trim().toLowerCase();
+      const filtered = SYLLABUS_DATA.filter(item => {
+        const matchesMonth = (state.selectedMonth === 0) || (item.month === state.selectedMonth);
+        if (!matchesMonth) return false;
+        if (!query) return true;
+        const inTitle = item.title.toLowerCase().includes(query);
+        const inTrack = item.track.toLowerCase().includes(query);
+        const inTasks = item.tasks.some(t => t.toLowerCase().includes(query));
+        return inTitle || inTrack || inTasks;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <p style="font-size:20px;font-weight:600;margin:0 0 4px 0;">No topics found</p>
+            <p style="margin:0;">Try adjusting your search terms or selecting another month tab.</p>
+          </div>`;
+        return;
+      }
+
+      const groups = {};
+      filtered.forEach(item => {
+        const key = `${item.month}-${item.week}`;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(item);
+      });
+
+      const sortedKeys = Object.keys(groups).sort((a, b) => {
+        const [ma, wa] = a.split('-').map(Number);
+        const [mb, wb] = b.split('-').map(Number);
+        return ma !== mb ? ma - mb : wa - wb;
+      });
+
+      let html = '';
+      sortedKeys.forEach(key => {
+        const days = groups[key];
+        const [month, weekNum] = key.split('-').map(Number);
+        const collapseKey = `${month}-${weekNum}`;
+        const isCollapsed = state.collapsedWeeks.has(collapseKey);
+
+        let weekTotal = 0, weekDone = 0;
+        days.forEach(d => {
+          d.tasks.forEach((_, idx) => {
+            weekTotal++;
+            if (state.completedTasks.has(`${d.month}-${d.day}-${idx}`)) weekDone++;
+          });
+        });
+        const weekPct = weekTotal > 0 ? Math.round((weekDone / weekTotal) * 100) : 0;
+
+        html += `
+          <div class="week-group">
+            <div class="week-header" onclick="toggleWeek(${month}, ${weekNum})">
+              <div class="week-title">
+                <span class="week-toggle-icon">${isCollapsed ? '+' : '−'}</span>
+                <span>Month ${month} — Week ${weekNum}</span>
+              </div>
+              <div class="week-meta">
+                ${weekDone}/${weekTotal} Tasks (${weekPct}%)
+              </div>
+            </div>
+            <div class="week-group-content" style="display: ${isCollapsed ? 'none' : 'block'};">
+              <div class="day-list">
+                ${days.map(d => renderDayItem(d)).join('')}
+              </div>
+            </div>
+          </div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function renderDayItem(d) {
+      return `
+        <div class="day-item">
+          <div class="day-header-row">
+            <div class="day-meta">
+              <span class="day-badge">DAY ${d.day}</span>
+              <span class="track-badge">${d.track}</span>
+            </div>
+            <div class="day-title">${d.title}</div>
+          </div>
+          <div class="task-list">
+            ${d.tasks.map((taskText, idx) => {
+              const isChecked = state.completedTasks.has(`${d.month}-${d.day}-${idx}`);
+              return `
+                <label class="task-item ${isChecked ? 'is-completed' : ''}">
+                  <input type="checkbox" class="task-checkbox" ${isChecked ? 'checked' : ''} 
+                    onchange="toggleTask(${d.month}, ${d.day}, ${idx})">
+                  <span class="task-label">${taskText}</span>
+                </label>`;
+            }).join('')}
+          </div>
+          ${renderStudyResources(d)}
+        </div>`;
+    }
+
+    function updateViz() {
+      try { renderHeader(); } catch (e) { console.error(e); }
+      try { renderTabs(); } catch (e) { console.error(e); }
+      try { renderSchedule(); } catch (e) { console.error(e); }
+    }
+
+    // ==================== EVENTS ====================
+    document.getElementById('searchInput')?.addEventListener('input', (e) => {
+      state.searchQuery = e.target.value;
+      updateViz();
+    });
+
+    document.getElementById('printBtn')?.addEventListener('click', () => {
+      window.print();
+    });
+
+    // ==================== THEME ====================
+    function applyTheme(theme) {
+      if (theme === 'dark' || theme === 'light') {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.style.setProperty('color-scheme', theme);
+      }
+    }
+
+    if (!document.documentElement.hasAttribute('data-theme') && window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+      applyTheme('dark');
+    }
+
+    window.addEventListener('message', (e) => {
+      if (e.data?.type === 'set-theme' || e.data?.type === 'APPLY_THEME') {
+        applyTheme(e.data.theme);
+      }
+    });
+
+    // ==================== AUTO-RESIZE NOTIFY ====================
+    (function autoResize() {
+      function notifyHeight() {
+        const c = document.querySelector('.widget-container') || document.body;
+        if (!c) return;
+        const h = Math.ceil(Math.max(c.getBoundingClientRect().bottom, c.scrollHeight));
+        window.parent.postMessage({ type: 'widget-resize', height: h }, '*');
+      }
+      window.addEventListener('load', () => setTimeout(notifyHeight, 120));
+      if (window.ResizeObserver) {
+        new ResizeObserver(() => notifyHeight()).observe(document.querySelector('.widget-container') || document.body);
+      }
+    })();
+
+    // ==================== INIT ====================
+    updateViz();
+  </script>
+</body>
+</html>
